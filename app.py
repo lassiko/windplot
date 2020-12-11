@@ -48,14 +48,15 @@ def line():
         for j in range (len(me3)):
             observation.append(float(me3[j]))
         observations2.append(observation)
-
-    winddir = []
     tstamp = []
+    winddir = []
     windspd = []
+    windgst = []
     for t in range (len(observations2)):
         tstamp.append(observations2[t][0])
         windspd.append(observations2[t][4])
         winddir.append(observations2[t][5])
+        windgst.append(observations2[t][6])
     wdmax = max(winddir)
     wdmin = min(winddir)
     if wdmax-wdmin > 180:
@@ -63,7 +64,7 @@ def line():
             if winddir[t] > 180:
                 winddir[t] -= 360
 
-    return render_template('line_chart.html', title='GOF wind', wmax=wdmax, wmin=wdmin, t=tstamp, s=windspd, d=winddir)
+    return render_template('line_chart.html', title='GOF wind', wmax=wdmax, wmin=wdmin, t=tstamp, s=windspd, d=winddir,g=windgst,station=station)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
