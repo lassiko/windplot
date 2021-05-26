@@ -9,12 +9,15 @@ import datetime as dt
 
 app = Flask(__name__)
 
-@app.route('/line', methods=["GET", "POST"])
+@app.route('/', methods=["GET", "POST"])
 def line():
+    sunit = 1.0
     station = request.form.get("obstat")
-    print ("Station", station)
+    speedunit = request.form.get("spdunit")
     if station == None:
         station="100996"
+    if speedunit == None or speedunit =="knots":
+        sunit=1.944
 
     weather_baga_url = "http://opendata.fmi.fi/wfs?request=getFeature&storedquery_id=fmi::observations::weather::multipointcoverage&fmisid=" + station + "&parameters=Temperature,Humidity,DewPoint,WindSpeedMS,WindDirection,WindGust"
     data = requests.get(weather_baga_url)
@@ -59,12 +62,17 @@ def line():
         windgst.append(observations2[t][6])
     wdmax = max(winddir)
     wdmin = min(winddir)
-    if wdmax-wdmin > 180:
-        for t in range (len(winddir)):
-            if winddir[t] > 180:
-                winddir[t] -= 360
-
-    return render_template('line_chart.html', title='GOF wind', wmax=wdmax, wmin=wdmin, t=tstamp, s=windspd, d=winddir,g=windgst,station=station)
+    if wdmax > 320:
+        if wdmin < 40:
+            for t in range (len(winddir)):
+                if winddir[t] > 180:
+                    winddir[t] -= 360
+    for s in range (len(windspd)):
+        windspd[s] = round(sunit*windspd[s],1)
+    for s in range (len(windgst)):
+        windgst[s] = round(sunit*windgst[s],1)
+    
+    return render_template('line_chart.html', title='GOF wind', wmax=wdmax, wmin=wdmin, t=tstamp, s=windspd, d=winddir,g=windgst,station=station,sunit=speedunit)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
