@@ -13,7 +13,7 @@
 <body>
 <h2 style="text-align:center">{{ title }}</h2>
 <div class="container-fluid" id="choice">
-  <form action="/line" method="post" id="selform" name="selform">
+  <form action="/" method="post" id="selform" name="selform">
       <div class="form-group">
           <label class="sr-only" for="obstat">Obs station</label>
           <select onchange=this.form.submit() class="form-control" id="obstat" name="obstat">
@@ -23,6 +23,11 @@
               <option value="100969" {% if station == "100969" %} selected {% endif %}>Bågaskär</option>
               <option value="105392" {% if station == "105392" %} selected {% endif %}>Itätoukki</option>
               <option value="101029" {% if station == "101029" %} selected {% endif %}>Eestiluoto</option>
+          </select>
+          <label class="sr-only" for="spdunit">Speed unit</label>
+          <select onchange=this.form.submit() class="form-control" id="spdunit" name="spdunit">
+              <option value="knots" {% if sunit == "knots" %} selected {% endif %}>knots</option>
+              <option value="ms" {% if sunit == "ms" %} selected {% endif %}>m/s</option>
           </select>
       </div>
   </form>
@@ -73,11 +78,13 @@ const layout = {
   title: 'Direction',
   height: 800,
   xaxis: {
-    range: [ wavg - 45, wavg + 45]
+    range: [ Math.min(wavg - 45,{{wmin}}),Math.max(wavg + 45,{{wmax}})],
+    fixedrange: true
   },
   yaxis: {
     autorange: 'reversed',
-    scaleratio: 10
+    scaleratio: 10,
+    fixedrange: true
     }
 }
 var config = {responsive: true}
