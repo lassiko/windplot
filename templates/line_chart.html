@@ -5,29 +5,40 @@
 <style>
   .form-group {
     text-align: center;
-  }
+    font-family: Verdana, sans-serif;
+    font-size: 1em; 
+    }
+    .form-control {
+    text-align: center;
+    font-family: Verdana, sans-serif;
+    font-size: 1em;
+    }
 </style>
 <!-- Plotly.js -->
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-<h2 style="text-align:center">{{ title }}</h2>
+<h2 style="text-align:center; font-family: Verdana, sans-serif">{{ title }}</h2>
 <div class="container-fluid" id="choice">
   <form action="/" method="post" id="selform" name="selform">
       <div class="form-group">
           <label class="sr-only" for="obstat">Obs station</label>
           <select onchange=this.form.submit() class="form-control" id="obstat" name="obstat">
+            <optgroup>
               <option value="100996" {% if station == "100996" %} selected {% endif %}>Harmaja</option>
               <option value="101003" {% if station == "101003" %} selected {% endif %}>Kasuuni</option>
               <option value="100997" {% if station == "100997" %} selected {% endif %}>Mäkiluoto</option>
               <option value="100969" {% if station == "100969" %} selected {% endif %}>Bågaskär</option>
               <option value="105392" {% if station == "105392" %} selected {% endif %}>Itätoukki</option>
               <option value="101029" {% if station == "101029" %} selected {% endif %}>Eestiluoto</option>
+            </optgroup>
           </select>
           <label class="sr-only" for="spdunit">Speed unit</label>
           <select onchange=this.form.submit() class="form-control" id="spdunit" name="spdunit">
+            <optgroup>
               <option value="knots" {% if sunit == "knots" %} selected {% endif %}>knots</option>
               <option value="ms" {% if sunit == "ms" %} selected {% endif %}>m/s</option>
+            </optgroup>
           </select>
       </div>
   </form>
@@ -55,7 +66,12 @@ var datas = [
 ];
 const layouts = {
   title: 'Speed',
-  height: 400,
+  xaxis: {
+    fixedrange: true
+  },
+  yaxis: {
+    fixedrange: true
+    }
 }
 var configs = {responsive: true}
 Plotly.newPlot('speed', datas, layouts, configs);

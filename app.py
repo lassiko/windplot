@@ -67,6 +67,8 @@ def line():
             for t in range (len(winddir)):
                 if winddir[t] > 180:
                     winddir[t] -= 360
+    wdmax = max(winddir)
+    wdmin = min(winddir)
     for s in range (len(windspd)):
         windspd[s] = round(sunit*windspd[s],1)
     for s in range (len(windgst)):
